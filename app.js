@@ -42,7 +42,7 @@ app.get("/take-photo", (req, res) => {
       aliasPath,
       path.join(__dirname, "public/fotoImprimir.jpg"),
       watermarkPath
-    ).then(() => console.log("imprime"));
+    )
 
     res.redirect("/");
   });
