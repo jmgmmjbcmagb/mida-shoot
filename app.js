@@ -16,7 +16,11 @@ app.get("/", (req, res) => {
 // Ruta para tomar una foto
 app.get("/take-photo", (req, res) => {
   const now = new Date();
-  const timestamp = now.toISOString().replace(/T/, '-').replace(/:/g, '').replace(/\..+/, '');
+  const timestamp = now
+    .toISOString()
+    .replace(/T/, "-")
+    .replace(/:/g, "")
+    .replace(/\..+/, "");
   const filename = `foto-${timestamp}.jpg`;
   const fullPath = path.join(__dirname, "public/photos", filename);
 
@@ -38,20 +42,21 @@ app.get("/take-photo", (req, res) => {
 
 // Ruta para vista previa en vivo
 app.get("/live-preview", (req, res) => {
-  const previewPath = path.join(__dirname, "public/preview", "preview.jpg");
+  const previewPath = path.join(__dirname, "public", "preview.jpg");
   const previewCmd = `gphoto2 --capture-image-and-download --filename ${previewPath}`;
-
-  exec(previewCmd, (err) => {
-    if (err) {
-      console.error("Error al capturar preview:", err);
-      return res.status(500).send("Error al capturar preview.");
-    }
-
-    console.log("Preview actualizado");
-    res.send("ok");
-  });
+  try {
+    exec(previewCmd, (err) => {
+      if (err) {
+        console.error("Error al capturar preview:", err);
+        return res.status().send("Error al capturar preview.");
+      }
+      console.log("Preview actualizado");
+      res.send("ok");
+    });
+  } catch (error) {
+    res.status().send("Error al capturar preview.");
+  }
 });
-
 
 app.listen(PORT, () => {
   console.log(`Servidor en http://localhost:${PORT}`);
