@@ -53,13 +53,6 @@ async function procesarFoto(inputPath, outputPath, watermarkPath) {
     const image = await Jimp.read(inputPath);
     const watermark = await Jimp.read(watermarkPath);
 
-    const height = image.bitmap.height;
-    const targetWidth = Math.floor((3 / 2) * height);
-    const xOffset = Math.floor((image.bitmap.width - targetWidth) / 2);
-
-    // Recortar
-    image.crop(xOffset, 0, targetWidth, height);
-
     // Redimensionar watermark si es muy grande (opcional)
     watermark.resize(Jimp.AUTO, 500); // altura de 100px
 
