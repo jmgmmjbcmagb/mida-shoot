@@ -1,119 +1,97 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Control de Cámara</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      background: #f4f4f4;
-      padding: 20px;
-    }
-    img {
-      max-width: 100%;
-      height: auto;
-      border: 1px solid #ccc;
-      margin-bottom: 10px;
-    }
-    .controls {
-      margin-top: 20px;
-    }
-    button {
-      padding: 10px 20px;
-      margin: 5px;
-    }
-    label {
-      margin-left: 10px;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Control de Cámara</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            background: #f4f4f4;
+            padding: 20px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+        }
+
+        label {
+            margin-left: 10px;
+        }
+    </style>
 </head>
+
 <body>
 
-  <h1>Control de Cámara</h1>
+    <h1>Control de Cámara</h1>
 
-  <img id="photo" src="/foto.jpg" alt="Vista actual" />
+    <img id="photo" src="/foto.jpg" alt="Vista actual" />
 
-  <div class="controls">
-    <button onclick="takePhoto()">📸 Tomar Foto</button>
-    <label>
-      <input type="checkbox" id="liveToggle" />
-      Live
-    </label>
-  </div>
+    <div class="controls">
+        <button onclick="takePhoto()">📸 Tomar Foto</button>
+        <label>
+            <input type="checkbox" id="liveToggle" />
+            Live
+        </label>
+    </div>
 
-  <h2>Vista en vivo de la webcam</h2>
-<video id="webcam" autoplay playsinline width="640" height="480"></video>
+    <h2>Vista en vivo de la webcam</h2>
+    <video id="webcam" autoplay playsinline width="640" height="480"></video>
 
-  <script>
+    <script>
 
-  if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-    recognition.lang = "es-ES";
-    recognition.continuous = true;
-    recognition.interimResults = false;
-
-    recognition.onresult = function (event) {
-      const result = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
-      console.log("🎧 Escuchado:", result);
-      if (result.includes("foto")) {
-        takePhoto();
-      }
-    };
-
-    recognition.onerror = function (event) {
-      console.error("🎙️ Error en reconocimiento:", event.error);
-    };
-
-    recognition.onend = function () {
-      recognition.start(); // reinicia si se detiene
-    };
-
-    recognition.start();
-    console.log("🎙️ Reconocimiento de voz activado...");
-  } else {
-    console.warn("❌ El navegador no soporta reconocimiento de voz");
-  }
-
-      const webcam = document.getElementById("webcam");
+        const webcam = document.getElementById("webcam");
 
 
 
-  navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-    .then(stream => {
-      webcam.srcObject = stream;
-    })
-    .catch(err => {
-      console.error("Error al acceder a la webcam:", err);
-    });
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+            .then(stream => {
+                webcam.srcObject = stream;
+            })
+            .catch(err => {
+                console.error("Error al acceder a la webcam:", err);
+            });
 
-    const photoElement = document.getElementById("photo");
+        const photoElement = document.getElementById("photo");
 
-    function takePhoto() {
-      fetch("/take-photo")
-        .then(() => updatePhoto("/foto.jpg"))
-        .catch(err => console.error("Error al tomar foto:", err));
-    }
+        function takePhoto() {
+            fetch("/take-photo")
+                .then(() => updatePhoto("/foto.jpg"))
+                .catch(err => console.error("Error al tomar foto:", err));
+        }
 
-    function updatePhoto(src) {
-      const timestamp = new Date().getTime();
-      photoElement.src = `${src}?${timestamp}`; // Cache busting
-    }
+        function updatePhoto(src) {
+            const timestamp = new Date().getTime();
+            photoElement.src = `${src}?${timestamp}`; // Cache busting
+        }
 
         document.addEventListener("keydown", (event) => {
-      if (event.key === "1") {
-        takePhoto();
-      }
-    });
+            if (event.key === "1") {
+                takePhoto();
+            }
+        });
 
 
-    // Mostrar última foto al cargar
-    updatePhoto("/foto.jpg");
+        // Mostrar última foto al cargar
+        updatePhoto("/foto.jpg");
 
 
-  </script>
+    </script>
 
 </body>
+
 </html>
