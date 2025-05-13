@@ -48,6 +48,12 @@
 
   <script>
 
+        document.addEventListener("keydown", (event) => {
+      if (event.key === "1") {
+        takePhoto();
+      }
+    });
+
       const webcam = document.getElementById("webcam");
 
   navigator.mediaDevices.getUserMedia({ video: true, audio: false })
