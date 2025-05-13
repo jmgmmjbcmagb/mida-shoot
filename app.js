@@ -58,7 +58,7 @@ async function procesarFoto(inputPath, outputPath, watermarkPath) {
     const xOffset = Math.floor((image.bitmap.width - targetWidth) / 2);
 
     // Recortar
-    image.crop(xOffset, 0, targetWidth/10, height/10);
+    image.crop(xOffset, 0, targetWidth, height);
 
     // Redimensionar watermark si es muy grande (opcional)
     watermark.resize(Jimp.AUTO, 500); // altura de 100px
