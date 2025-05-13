@@ -33,7 +33,7 @@
 
   <h1>Control de Cámara</h1>
 
-  <img id="photo" src="/foto.jpg" alt="Última foto" />
+  <img id="photo" src="/foto.jpg" alt="Vista actual" />
 
   <div class="controls">
     <button onclick="takePhoto()">📸 Tomar Foto</button>
@@ -50,36 +50,33 @@
 
     function takePhoto() {
       fetch("/take-photo")
-        .then(() => updatePhoto())
+        .then(() => updatePhoto("/foto.jpg"))
         .catch(err => console.error("Error al tomar foto:", err));
     }
 
-    function updatePhoto() {
+    function updatePhoto(src) {
       const timestamp = new Date().getTime();
-      photoElement.src = `/foto.jpg?${timestamp}`; // Forzar recarga con cache busting
+      photoElement.src = `${src}?${timestamp}`; // Cache busting
     }
 
     function capturePreview() {
       fetch("/live-preview")
-        .then(() => {
-          const ts = new Date().getTime();
-          photoElement.src = `/preview.jpg?${ts}`; // Mostrar imagen live
-        })
-        .catch(err => console.error("Error en live preview:", err));
+        .then(() => updatePhoto("/preview.jpg"))
+        .catch(err => console.error("Error en preview:", err));
     }
 
     liveToggle.addEventListener("change", () => {
       if (liveToggle.checked) {
-        capturePreview(); // Toma una al activar
+        capturePreview(); // Captura inmediata
         liveInterval = setInterval(capturePreview, 5000);
       } else {
         clearInterval(liveInterval);
-        updatePhoto(); // Volver a la última foto real
+        updatePhoto("/foto.jpg");
       }
     });
 
-    // Inicializar mostrando la última foto
-    updatePhoto();
+    // Mostrar última foto al cargar
+    updatePhoto("/foto.jpg");
   </script>
 
 </body>

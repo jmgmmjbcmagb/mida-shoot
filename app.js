@@ -38,10 +38,7 @@ app.get("/take-photo", (req, res) => {
 
 // Ruta para vista previa en vivo
 app.get("/live-preview", (req, res) => {
-  const now = new Date();
-  const timestamp = now.toISOString().replace(/T/, '-').replace(/:/g, '').replace(/\..+/, '');
-  const previewFilename = `preview-${timestamp}.jpg`;
-  const previewPath = path.join(__dirname, "public", previewFilename);
+  const previewPath = path.join(__dirname, "public", "preview.jpg");
   const previewCmd = `gphoto2 --capture-preview --filename ${previewPath}`;
 
   exec(previewCmd, (err) => {
@@ -50,12 +47,11 @@ app.get("/live-preview", (req, res) => {
       return res.status(500).send("Error al capturar preview.");
     }
 
-    // Eliminar fotos antiguas si hay más de 5
-    cleanOldPreviews();
-
+    console.log("Preview actualizado");
     res.send("ok");
   });
 });
+
 
 // Función para limpiar las fotos de vista previa antiguas
 function cleanOldPreviews() {
