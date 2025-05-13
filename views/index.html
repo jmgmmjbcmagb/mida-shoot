@@ -7,29 +7,32 @@
     body {
       font-family: sans-serif;
       text-align: center;
-      background-color: #f0f0f0;
       padding: 2rem;
-    }
-    h1 {
-      color: #333;
+      background: #f0f0f0;
     }
     button {
       padding: 1rem 2rem;
       font-size: 1.2rem;
-      background-color: #007bff;
+      margin: 1rem;
+      background: #007bff;
       color: white;
       border: none;
       border-radius: 8px;
       cursor: pointer;
     }
     button:hover {
-      background-color: #0056b3;
+      background: #0056b3;
     }
     img {
-      margin-top: 2rem;
-      max-width: 80%;
+      margin-top: 1rem;
+      max-width: 90%;
       border: 2px solid #444;
       border-radius: 10px;
+    }
+    label {
+      display: inline-block;
+      margin-top: 1rem;
+      font-size: 1.1rem;
     }
   </style>
 </head>
@@ -40,9 +43,42 @@
     <button type="submit">Tomar Foto</button>
   </form>
 
-  <div id="foto">
-    <h2>Última foto:</h2>
-    <img src="/foto.jpg?ts=<%= Date.now() %>" alt="Foto tomada" onerror="this.style.display='none';" />
+  <label>
+    <input type="checkbox" id="liveToggle" />
+    Activar vista previa (Live)
+  </label>
+
+  <div id="preview">
+    <h2>📺 Vista previa (cada 5s):</h2>
+    <img id="previewImg" src="/preview.jpg?ts=0" alt="Preview" onerror="this.style.display='none';" />
   </div>
+
+  <div id="lastPhoto">
+    <h2>🖼️ Última Foto:</h2>
+    <img src="/foto.jpg?ts=<script>document.write(Date.now())</script>" alt="Última foto" onerror="this.style.display='none';" />
+  </div>
+
+  <script>
+    let intervalId = null;
+    const checkbox = document.getElementById("liveToggle");
+    const previewImg = document.getElementById("previewImg");
+
+    checkbox.addEventListener("change", () => {
+      if (checkbox.checked) {
+        intervalId = setInterval(() => {
+          fetch("/live-preview")
+            .then(() => {
+              const timestamp = Date.now();
+              previewImg.src = `/preview.jpg?ts=${timestamp}`;
+              previewImg.style.display = "block";
+            })
+            .catch((err) => console.error("Error preview:", err));
+        }, 5000);
+      } else {
+        clearInterval(intervalId);
+        previewImg.style.display = "none";
+      }
+    });
+  </script>
 </body>
 </html>
