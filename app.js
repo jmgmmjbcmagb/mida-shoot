@@ -27,16 +27,20 @@ app.get("/take-photo", (req, res) => {
   const takePhoto = `gphoto2 --capture-image-and-download --filename ${fullPath}`;
 
   exec(takePhoto, (err) => {
-    if (err) {
-      console.error("Error al tomar foto:", err);
-      return res.status(500).send("Error al tomar foto.");
+    try {
+      if (err) {
+        console.error("Error al tomar foto:", err);
+        return res.status(500).send("Error al tomar foto.");
+      }
+
+      const aliasPath = path.join(__dirname, "public/foto.jpg");
+      fs.copyFileSync(fullPath, aliasPath);
+
+      console.log("Foto tomada:", filename);
+      res.redirect("/");
+    } catch (error) {
+      res.status().send("Error al capturar preview.");
     }
-
-    const aliasPath = path.join(__dirname, "public/foto.jpg");
-    fs.copyFileSync(fullPath, aliasPath);
-
-    console.log("Foto tomada:", filename);
-    res.redirect("/");
   });
 });
 
