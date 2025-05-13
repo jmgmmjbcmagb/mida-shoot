@@ -38,7 +38,7 @@ app.get("/take-photo", (req, res) => {
 
     console.log("Foto tomada:", filename);
 
-    procesarFoto(
+    añadirMarcaAgua(
       aliasPath,
       path.join(__dirname, "public/fotoImprimir.jpg"),
       watermarkPath
@@ -48,28 +48,16 @@ app.get("/take-photo", (req, res) => {
   });
 });
 
-async function procesarFoto(inputPath, outputPath, watermarkPath) {
-  try {
-    const image = await Jimp.read(inputPath);
-    const watermark = await Jimp.read(watermarkPath);
-
-    // Redimensionar watermark si es muy grande (opcional)
-    watermark.resize(Jimp.AUTO, 500); // altura de 100px
-
-    // Pegar marca en esquina inferior izquierda
-    const x = 10;
-    const y = image.bitmap.height - watermark.bitmap.height - 10;
-
-    image.composite(watermark, x, y, {
-      mode: Jimp.BLEND_SOURCE_OVER,
-      opacitySource: 1,
-    });
-
-    await image.writeAsync(outputPath);
-    console.log("✅ Imagen procesada con Jimp:", outputPath);
-  } catch (err) {
-    console.error("❌ Error con Jimp:", err);
-  }
+function añadirMarcaAgua(inputPath, outputPath, watermarkPath) {
+  const command = `composite -gravity SouthWest -geometry +10+10 ${watermarkPath} ${inputPath} ${outputPath}`;
+  
+  exec(command, (err, stdout, stderr) => {
+    if (err) {
+      console.error("❌ Error al añadir marca de agua:", stderr);
+    } else {
+      console.log("✅ Marca de agua añadida:", outputPath);
+    }
+  });
 }
 
 app.listen(PORT, () => {
