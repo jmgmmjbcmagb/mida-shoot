@@ -19,7 +19,7 @@ app.get("/take-photo", (req, res) => {
   const filename = `foto-${timestamp}.jpg`;
   const fullPath = path.join(__dirname, "public", filename);
 
-  const disableFlash = `gphoto2 --set-config flashmode=Off`;
+  const disableFlash = `gphoto2 --set-config /main/actions/popupflash=1`;
   const takePhoto = `gphoto2 --capture-image-and-download --filename ${fullPath}`;
 
   exec(disableFlash, (err) => {
