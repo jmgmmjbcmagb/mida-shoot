@@ -47,7 +47,7 @@ app.get("/take-photo", (req, res) => {
 app.get("/live-preview", (req, res) => {
   const previewPath = path.join(__dirname, "public", "preview.jpg");
 
-  const disableFlash = `gphoto2 --set-config flashmode=Off`;
+  const disableFlash = `gphoto2 --set-config /main/actions/popupflash=1`;
   const previewCmd = `gphoto2 --capture-preview --filename ${previewPath}`;
 
   exec(disableFlash, (err) => {
