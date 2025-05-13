@@ -47,23 +47,29 @@ app.get("/take-photo", (req, res) => {
 // Ruta para vista previa en vivo
 app.get("/live-preview", (req, res) => {
   const previewPath = path.join(__dirname, "public", "preview.jpg");
+
+  // Elimina el archivo si existe, pero ignora el error si no
   fs.unlink(previewPath, (err) => {
-    if (err) {
-      console.error("No se pudo eliminar preview.jpg:", err);
-    } else {
-      const previewCmd = `gphoto2 --capture-image-and-download --filename ${previewPath}`;
-      try {
-        exec(previewCmd, (err) => {
-          if (err) {
-            console.error("Error al capturar preview:", err);
-            return res.status().send("Error al capturar preview.");
-          }
-          console.log("Preview actualizado");
-          res.send("ok");
-        });
-      } catch (error) {
-        res.status().send("Error al capturar preview.");
+    if (err && err.code !== "ENOENT") {
+      console.error("Error eliminando preview anterior:", err);
+    }
+
+    const previewCmd = `gphoto2 --capture-image-and-download --filename ${previewPath}`;
+    try {
+      if (err) {
+        console.error("Error al tomar foto:", err);
+        return res.status(500).send("Error al tomar foto.");
       }
+      exec(previewCmd, (err) => {
+        if (err) {
+          console.error("Error al capturar preview:", err);
+          return res.status(500).send("Error al capturar preview.");
+        }
+        console.log("Preview actualizado");
+        res.send("ok");
+      });
+    } catch (error) {
+      res.status().send("Error al capturar preview.");
     }
   });
 });

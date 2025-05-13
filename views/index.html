@@ -43,7 +43,21 @@
     </label>
   </div>
 
+  <h2>Vista en vivo de la webcam</h2>
+<video id="webcam" autoplay playsinline width="640" height="480"></video>
+
   <script>
+
+      const webcam = document.getElementById("webcam");
+
+  navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    .then(stream => {
+      webcam.srcObject = stream;
+    })
+    .catch(err => {
+      console.error("Error al acceder a la webcam:", err);
+    });
+
     const photoElement = document.getElementById("photo");
     const liveToggle = document.getElementById("liveToggle");
     let liveInterval = null;
