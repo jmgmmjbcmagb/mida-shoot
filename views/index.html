@@ -24,6 +24,10 @@
             margin-top: 20px;
         }
 
+                .photo {
+            display: none;
+        }
+
         button {
             padding: 10px 20px;
             margin: 5px;
@@ -36,7 +40,20 @@
 </head>
 
 <body>
-
+<div id="countdown" style="
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  font-size: 70vh;
+  font-weight: bold;
+  text-align: center;
+  line-height: 100vh;
+  text-shadow: 4px 4px 0 black;
+  z-index: 9999;
+"></div>
     <h1>Control de Cámara</h1>
 
     <img id="photo" src="/foto.jpg" alt="Vista actual" />
@@ -69,9 +86,26 @@
         const photoElement = document.getElementById("photo");
 
         function takePhoto() {
-            fetch("/take-photo")
-                .then(() => updatePhoto("/foto.jpg"))
-                .catch(err => console.error("Error al tomar foto:", err));
+  const countdown = document.getElementById("countdown");
+  let count = 5;
+
+  countdown.style.display = "block";
+  countdown.textContent = count;
+
+  const countdownInterval = setInterval(() => {
+    count--;
+    if (count > 0) {
+      countdown.textContent = count;
+    } else {
+      clearInterval(countdownInterval);
+      countdown.style.display = "none";
+
+      // Hacer la foto
+      fetch("/take-photo")
+        .then(() => updatePhoto("/foto.jpg"))
+        .catch(err => console.error("Error al tomar foto:", err));
+    }
+  }, 1000);
         }
 
         function updatePhoto(src) {
