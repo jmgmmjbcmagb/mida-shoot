@@ -68,7 +68,7 @@
     liveToggle.addEventListener("change", () => {
       if (liveToggle.checked) {
         capturePreview(); // Captura inmediata
-        liveInterval = setInterval(capturePreview, 5000);
+        liveInterval = setInterval(capturePreview, 1000);
       } else {
         clearInterval(liveInterval);
         updatePhoto("/preview.jpg");
