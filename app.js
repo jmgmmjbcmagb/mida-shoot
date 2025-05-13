@@ -2,10 +2,11 @@ const express = require("express");
 const { exec } = require("child_process");
 const path = require("path");
 const fs = require("fs");
-
+const sharp = require("sharp");
 const app = express();
 const PORT = 3000;
 const MAX_PREVIEWS = 5; // Número máximo de fotos de vista previa a guardar
+const watermarkPath = path.join(__dirname, "public/marca.png");
 
 app.use(express.static("public"));
 
@@ -37,10 +38,46 @@ app.get("/take-photo", (req, res) => {
       fs.copyFileSync(fullPath, aliasPath);
 
       console.log("Foto tomada:", filename);
+
+      procesarFoto(aliasPath,path.join(__dirname, "public/fotoImprimir.jpg"),watermarkPath).then(()=>
+    console.log('imprime'))
+
       res.redirect("/");
     
   });
 });
+
+
+async function procesarFoto(inputPath, outputPath, watermarkPath) {
+  try {
+    // Tamaño original: 4272x2848 → queremos 3:2 → altura = 2848, ancho = 3/2 * 2848 = 4272 exacto (ya está bien)
+    // Pero en general, calculemos de forma dinámica por si cambia la cámara
+
+    const metadata = await sharp(inputPath).metadata();
+
+    const height = metadata.height;
+    const width = Math.floor((3 / 2) * height);
+
+    const xOffset = Math.floor((metadata.width - width) / 2);
+
+    const image = sharp(inputPath)
+      .extract({ width, height, left: xOffset, top: 0 })
+      .composite([
+        {
+          input: watermarkPath,
+          gravity: "southwest", // esquina inferior izquierda
+          blend: "over",
+          top: undefined, // usamos gravity
+          left: undefined,
+        },
+      ]);
+
+    await image.toFile(outputPath);
+    console.log("✅ Imagen procesada y guardada en:", outputPath);
+  } catch (err) {
+    console.error("❌ Error procesando imagen:", err);
+  }
+}
 
 app.listen(PORT, () => {
   console.log(`Servidor en http://localhost:${PORT}`);
