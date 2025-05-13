@@ -39,7 +39,7 @@ app.get("/take-photo", (req, res) => {
 // Ruta para vista previa en vivo
 app.get("/live-preview", (req, res) => {
   const previewPath = path.join(__dirname, "public", "preview.jpg");
-  const previewCmd = `gphoto2 --capture-preview --filename ${previewPath}`;
+  const previewCmd = `gphoto2 --capture-image-and-download --filename ${previewPath}`;
 
   exec(previewCmd, (err) => {
     if (err) {
