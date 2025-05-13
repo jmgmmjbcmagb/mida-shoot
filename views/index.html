@@ -48,11 +48,7 @@
 
   <script>
 
-        document.addEventListener("keydown", (event) => {
-      if (event.key === "1") {
-        takePhoto();
-      }
-    });
+
 
       const webcam = document.getElementById("webcam");
 
@@ -65,8 +61,6 @@
     });
 
     const photoElement = document.getElementById("photo");
-    const liveToggle = document.getElementById("liveToggle");
-    let liveInterval = null;
 
     function takePhoto() {
       fetch("/take-photo")
@@ -79,21 +73,12 @@
       photoElement.src = `${src}?${timestamp}`; // Cache busting
     }
 
-    function capturePreview() {
-      fetch("/live-preview")
-        .then(() => updatePhoto("/preview.jpg"))
-        .catch(err => console.error("Error en preview:", err));
-    }
-
-    liveToggle.addEventListener("change", () => {
-      if (liveToggle.checked) {
-        capturePreview(); // Captura inmediata
-        liveInterval = setInterval(capturePreview, 1000);
-      } else {
-        clearInterval(liveInterval);
-        updatePhoto("/preview.jpg");
+        document.addEventListener("keydown", (event) => {
+      if (event.key === "1") {
+        takePhoto();
       }
     });
+
 
     // Mostrar última foto al cargar
     updatePhoto("/foto.jpg");
