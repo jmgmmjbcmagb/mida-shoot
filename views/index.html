@@ -4,127 +4,44 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Control de Cámara</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            text-align: center;
-            background: #f4f4f4;
-            padding: 20px;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-            border: 1px solid #ccc;
-            margin-bottom: 10px;
-        }
-
-        .controls {
-            margin-top: 20px;
-        }
-
-                #photo {
-            display: none;
-        }
-
-        button {
-            padding: 10px 20px;
-            margin: 5px;
-        }
-
-        label {
-            margin-left: 10px;
-        }
-    </style>
+    <title>Primera Comunión Mireia 24 05 2025</title>
+    <link rel="stylesheet" href="/styles.css" />
 </head>
 
 <body>
-<div id="countdown" style="
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background: rgba(0,0,0,0.5);
-  color: white;
-  font-size: 70vh;
-  font-weight: bold;
-  text-align: center;
-  line-height: 100vh;
-  text-shadow: 4px 4px 0 black;
-  z-index: 9999;
-"></div>
-    <h1>Control de Cámara</h1>
-
+    <!-- COUNTDOWN -->
+    <section id="countdown"></section>
+    <!-- END COUNTDOWN -->
+    <section class="section-initial">
+        <section class="title-wrapper">
+            <div>
+                Primera Comunión Mireia
+            </div>
+        </section>
+        <section class="video-wrapper">
+            <video id="webcam" autoplay playsinline></video>
+        </section>
+        <section class="buttons-wrapper">
+            <div id="button1">
+                Enciende la cámara
+                <span>🖥️</span> 
+            </div>
+            <div id="button2">
+                Toma la foto 
+                <span>📸</span> 
+            </div>
+            <div id="button3">
+                Imprime tu copia
+                <span>🖨️</span>  
+            </div>
+        </section>
+    </section>
+    <!-- PHOTO -->
     <img id="photo" src="/foto.jpg" alt="Vista actual" />
-
-    <div class="controls">
-        <button onclick="takePhoto()">📸 Tomar Foto</button>
-        <label>
-            <input type="checkbox" id="liveToggle" />
-            Live
-        </label>
-    </div>
-
-    <h2>Vista en vivo de la webcam</h2>
-    <video id="webcam" autoplay playsinline width="640" height="480"></video>
-
-    <script>
-
-        const webcam = document.getElementById("webcam");
-
-
-
-        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-            .then(stream => {
-                webcam.srcObject = stream;
-            })
-            .catch(err => {
-                console.error("Error al acceder a la webcam:", err);
-            });
-
-        const photoElement = document.getElementById("photo");
-
-        function takePhoto() {
-  const countdown = document.getElementById("countdown");
-  let count = 5;
-
-  countdown.style.display = "block";
-  countdown.textContent = count;
-
-  const countdownInterval = setInterval(() => {
-    count--;
-    if (count > 0) {
-      countdown.textContent = count;
-    } else {
-      clearInterval(countdownInterval);
-      countdown.style.display = "none";
-
-      // Hacer la foto
-      fetch("/take-photo")
-        .then(() => updatePhoto("/foto.jpg"))
-        .catch(err => console.error("Error al tomar foto:", err));
-    }
-  }, 1500);
-        }
-
-        function updatePhoto(src) {
-            const timestamp = new Date().getTime();
-            photoElement.src = `${src}?${timestamp}`; // Cache busting
-        }
-
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "1") {
-                takePhoto();
-            }
-        });
-
-
-        // Mostrar última foto al cargar
-        updatePhoto("/foto.jpg");
-
-
-    </script>
+    <!-- END PHOTO -->
+    <!-- LIVE -->
+    <!-- LIVE -->
+    <script src="/script.js"></script>
 
 </body>
 

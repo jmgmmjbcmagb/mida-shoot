@@ -2,11 +2,9 @@ const express = require("express");
 const { exec } = require("child_process");
 const path = require("path");
 const fs = require("fs");
-const Jimp = require("jimp");
 const app = express();
 const PORT = 3000;
-const MAX_PREVIEWS = 5; // Número máximo de fotos de vista previa a guardar
-const watermarkPath = path.join(__dirname, "public/marca.png");
+const watermarkPath = path.join(__dirname, "public/watermark.png");
 
 app.use(express.static("public"));
 
@@ -42,7 +40,7 @@ app.get("/take-photo", (req, res) => {
       aliasPath,
       path.join(__dirname, "public/fotoImprimir.jpg"),
       watermarkPath
-    )
+    );
 
     res.redirect("/");
   });
@@ -50,7 +48,7 @@ app.get("/take-photo", (req, res) => {
 
 function añadirMarcaAgua(inputPath, outputPath, watermarkPath) {
   const command = `composite -gravity SouthWest -geometry +10+10 ${watermarkPath} ${inputPath} ${outputPath}`;
-  
+
   exec(command, (err, stdout, stderr) => {
     if (err) {
       console.error("❌ Error al añadir marca de agua:", stderr);
