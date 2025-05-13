@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Control de Cámara Canon</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background-color: #f0f0f0;
+      padding: 2rem;
+    }
+    h1 {
+      color: #333;
+    }
+    button {
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    img {
+      margin-top: 2rem;
+      max-width: 80%;
+      border: 2px solid #444;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📸 Control de tu Canon EOS 1100D</h1>
+
+  <form action="/take-photo" method="get">
+    <button type="submit">Tomar Foto</button>
+  </form>
+
+  <div id="foto">
+    <h2>Última foto:</h2>
+    <img src="/foto.jpg?ts=<%= Date.now() %>" alt="Foto tomada" onerror="this.style.display='none';" />
+  </div>
+</body>
+</html>
