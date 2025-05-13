@@ -48,9 +48,38 @@
 
   <script>
 
+  if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = "es-ES";
+    recognition.continuous = true;
+    recognition.interimResults = false;
 
+    recognition.onresult = function (event) {
+      const result = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+      console.log("🎧 Escuchado:", result);
+      if (result.includes("foto")) {
+        takePhoto();
+      }
+    };
+
+    recognition.onerror = function (event) {
+      console.error("🎙️ Error en reconocimiento:", event.error);
+    };
+
+    recognition.onend = function () {
+      recognition.start(); // reinicia si se detiene
+    };
+
+    recognition.start();
+    console.log("🎙️ Reconocimiento de voz activado...");
+  } else {
+    console.warn("❌ El navegador no soporta reconocimiento de voz");
+  }
 
       const webcam = document.getElementById("webcam");
+
+
 
   navigator.mediaDevices.getUserMedia({ video: true, audio: false })
     .then(stream => {
@@ -82,6 +111,8 @@
 
     // Mostrar última foto al cargar
     updatePhoto("/foto.jpg");
+
+
   </script>
 
 </body>
