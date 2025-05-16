@@ -1,6 +1,7 @@
 const webcam = document.getElementById("webcam");
 const photoElement = document.getElementById("photo");
 const image = document.getElementById("image");
+const loading = document.getElementById("loading");
 let countRun = false;
 
 navigator.mediaDevices
@@ -30,6 +31,7 @@ function takePhoto() {
     } else {
       clearInterval(countdownInterval);
       countdown.style.display = "none";
+      loading.style.display = "flex";
       fetch("/take-photo")
         .then(() => updatePhoto("/fotoImprimir.jpg"))
         .catch((err) => console.error("Error al tomar foto:", err));
@@ -41,6 +43,7 @@ function updatePhoto(src) {
   const timestamp = new Date().getTime();
   setTimeout(() => {
     image.src = `${src}?v=${timestamp}`;
+    loading.style.display = "none";
     photoElement.style.display = "flex";
     countRun = false;
   }, 1000);
