@@ -3,6 +3,7 @@ const photoElement = document.getElementById("photo");
 const image = document.getElementById("image");
 const loading = document.getElementById("loading");
 let countRun = false;
+let showPhoto = false;
 
 navigator.mediaDevices
   .getUserMedia({ video: true, audio: false })
@@ -15,7 +16,7 @@ navigator.mediaDevices
 
 function takePhoto() {
   if (countRun === true) {
-    return
+    return;
   }
   countRun = true;
   const countdown = document.getElementById("countdown");
@@ -46,17 +47,19 @@ function updatePhoto(src) {
     loading.style.display = "none";
     photoElement.style.display = "flex";
     countRun = false;
+    showPhoto = true;
   }, 2000);
 }
 
 document.addEventListener("keydown", (event) => {
-  if (event.key === "2" && countRun === false) {
+  if (event.key === "2" && countRun === false && showPhoto === false) {
     takePhoto();
   }
 });
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "1" && countRun === false) {
-      photoElement.style.display = "none";
+    showPhoto = false;
+    photoElement.style.display = "none";
   }
 });
