@@ -33,9 +33,9 @@ function takePhoto() {
 
 function updatePhoto(src) {
   const timestamp = new Date().getTime();
-  photoElement.src = ``;
+  photoElement.src = `/foto.jpg`;
   setTimeout(() => {
-    photoElement.src = `${src}?${timestamp}`;
+    photoElement.src = `${src}?v=${timestamp}`;
     photoElement.style.display = "flex";
   }, 1000);
 }
