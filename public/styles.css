@@ -67,6 +67,9 @@ img {
   align-items: center;
   justify-content: center;
   background: #00000088;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 #countdown {

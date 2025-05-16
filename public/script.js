@@ -38,7 +38,13 @@ function updatePhoto(src) {
 }
 
 document.addEventListener("keydown", (event) => {
-  if (event.key === "1") {
+  if (event.key === "2") {
     takePhoto();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "1") {
+      photoElement.style.display = "none";
   }
 });
