@@ -39,22 +39,22 @@ app.get("/take-photo", (req, res) => {
     añadirMarcaAgua(
       aliasPath,
       path.join(__dirname, "public/fotoImprimir.jpg"),
-      watermarkPath
+      watermarkPath,
+      res
     );
-
-    res.redirect("/");
   });
 });
 
-function añadirMarcaAgua(inputPath, outputPath, watermarkPath) {
+function añadirMarcaAgua(inputPath, outputPath, watermarkPath, res) {
   const command = `composite -gravity SouthWest -geometry +10+10 ${watermarkPath} ${inputPath} ${outputPath}`;
 
-  exec(command, (err, stdout, stderr) => {
+  return exec(command, (err, stdout, stderr) => {
     if (err) {
       console.error("❌ Error al añadir marca de agua:", stderr);
     } else {
       console.log("✅ Marca de agua añadida:", outputPath);
     }
+    res.redirect("/");
   });
 }
 
