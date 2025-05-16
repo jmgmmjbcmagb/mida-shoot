@@ -1,6 +1,7 @@
 const webcam = document.getElementById("webcam");
 const photoElement = document.getElementById("photo");
 const image = document.getElementById("image");
+let countRun = false;
 
 navigator.mediaDevices
   .getUserMedia({ video: true, audio: false })
@@ -12,6 +13,10 @@ navigator.mediaDevices
   });
 
 function takePhoto() {
+  if (countRun === true) {
+    return
+  }
+  countRun = true;
   const countdown = document.getElementById("countdown");
   let count = 5;
 
@@ -37,17 +42,18 @@ function updatePhoto(src) {
   setTimeout(() => {
     image.src = `${src}?v=${timestamp}`;
     photoElement.style.display = "flex";
+    countRun = false;
   }, 1000);
 }
 
 document.addEventListener("keydown", (event) => {
-  if (event.key === "2") {
+  if (event.key === "2" && countRun === false) {
     takePhoto();
   }
 });
 
 document.addEventListener("keydown", (event) => {
-  if (event.key === "1") {
+  if (event.key === "1" && countRun === false) {
       photoElement.style.display = "none";
   }
 });
