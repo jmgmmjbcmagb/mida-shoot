@@ -1,5 +1,6 @@
 const webcam = document.getElementById("webcam");
 const photoElement = document.getElementById("photo");
+const image = document.getElementById("image");
 
 navigator.mediaDevices
   .getUserMedia({ video: true, audio: false })
@@ -33,9 +34,8 @@ function takePhoto() {
 
 function updatePhoto(src) {
   const timestamp = new Date().getTime();
-  photoElement.src = `/foto.jpg`;
   setTimeout(() => {
-    photoElement.src = `${src}?v=${timestamp}`;
+    image.src = `${src}?v=${timestamp}`;
     photoElement.style.display = "flex";
   }, 1000);
 }
