@@ -46,7 +46,7 @@ function updatePhoto(src) {
     loading.style.display = "none";
     photoElement.style.display = "flex";
     countRun = false;
-  }, 1000);
+  }, 2000);
 }
 
 document.addEventListener("keydown", (event) => {
