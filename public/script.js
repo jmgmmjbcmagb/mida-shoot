@@ -33,7 +33,8 @@ function takePhoto() {
 
 function updatePhoto(src) {
   const timestamp = new Date().getTime();
-  photoElement.src = `${src}?${timestamp}`; // Cache busting
+  photoElement.src = `${src}?${timestamp}`;
+  photoElement.style.display = "block";
 }
 
 document.addEventListener("keydown", (event) => {
