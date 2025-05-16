@@ -33,8 +33,9 @@ function takePhoto() {
 
 function updatePhoto(src) {
   const timestamp = new Date().getTime();
-  photoElement.src = `${src}?${timestamp}`;
+  photoElement.src = ``;
   setTimeout(() => {
+    photoElement.src = `${src}?${timestamp}`;
     photoElement.style.display = "flex";
   }, 1000);
 }
