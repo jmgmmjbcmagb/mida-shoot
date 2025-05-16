@@ -34,7 +34,9 @@ function takePhoto() {
 function updatePhoto(src) {
   const timestamp = new Date().getTime();
   photoElement.src = `${src}?${timestamp}`;
-  photoElement.style.display = "block";
+  setTimeout(() => {
+    photoElement.style.display = "flex";
+  }, 1000);
 }
 
 document.addEventListener("keydown", (event) => {
