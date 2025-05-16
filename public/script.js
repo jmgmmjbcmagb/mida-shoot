@@ -25,7 +25,7 @@ function takePhoto() {
       clearInterval(countdownInterval);
       countdown.style.display = "none";
       fetch("/take-photo")
-        .then(() => updatePhoto("/foto.jpg"))
+        .then(() => updatePhoto("/fotoImprimir.jpg"))
         .catch((err) => console.error("Error al tomar foto:", err));
     }
   }, 1500);
