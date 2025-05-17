@@ -118,8 +118,6 @@ body {
 #instructions1,
 #instructions2,
 #instructions3 {
-  opacity: 0;
-  animation: fadeIn 1.5s ease-in-out forwards;
   position: fixed;
   width: 30%;
   height: auto;
@@ -135,10 +133,4 @@ body {
 #instructions1,
 #instructions3 {
   left: 0;
-}
-
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-  }
 }
