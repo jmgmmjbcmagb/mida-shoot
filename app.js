@@ -5,7 +5,7 @@ const fs = require("fs");
 const app = express();
 const PORT = 3000;
 const watermarkPath = path.join(__dirname, "public/watermark.png");
-const printPath = path.join(__dirname, 'public', 'test.jpg');
+const printPath = path.join(__dirname, 'public', 'fotoImprimir.jpg');
 
 app.use(express.static("public"));
 
