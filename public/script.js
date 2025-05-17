@@ -7,6 +7,7 @@ const instructions2 = document.getElementById("instructions2");
 const instructions3 = document.getElementById("instructions3");
 let countRun = false;
 let showPhoto = false;
+instructions1.style.display = "none";
 instructions2.style.display = "none";
 instructions3.style.display = "none";
 
@@ -96,3 +97,7 @@ document.addEventListener("keydown", (event) => {
       .catch((err) => console.error("Error al imprimir foto:", err));
   }
 });
+
+setTimeout(() => {
+  instructions1.style.display = "block";
+}, 1000);
