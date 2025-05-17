@@ -6,8 +6,6 @@ const app = express();
 const PORT = 3000;
 const watermarkPath = path.join(__dirname, "public/watermark.png");
 const printer = require('printer');
-const fs = require('fs');
-const path = require('path');
 const printPath = path.join(__dirname, 'public', 'test.jpg');
 
 const printers = printer.getPrinters();
