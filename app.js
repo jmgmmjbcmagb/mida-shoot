@@ -63,7 +63,7 @@ function añadirMarcaAgua(inputPath, outputPath, watermarkPath, res, filename) {
 app.get("/print-photo", (req, res) => {
   const printerName = 'HP_Envy_6100e_series_EA4513'; // cámbialo por el real
 
-  const cmd = `lp -o media=4x6 -o fit-to-page -d ${printerName} "${printPath}"`;
+  const cmd = `lp -o media=10x15 -o fit-to-page -d ${printerName} "${printPath}"`;
 
   exec(cmd, (error, stdout, stderr) => {
     if (error) {
