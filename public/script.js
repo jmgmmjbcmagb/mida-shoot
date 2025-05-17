@@ -66,7 +66,7 @@ document.addEventListener("keydown", (event) => {
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "3" && countRun === false && showPhoto === true) {
-    fetch("/take-photo")
+    fetch("/print-photo")
         .then(() => {
               showPhoto = false;
     photoElement.style.display = "none";
