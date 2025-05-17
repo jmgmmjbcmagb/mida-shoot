@@ -5,14 +5,7 @@ const fs = require("fs");
 const app = express();
 const PORT = 3000;
 const watermarkPath = path.join(__dirname, "public/watermark.png");
-const printer = require('printer');
 const printPath = path.join(__dirname, 'public', 'test.jpg');
-
-const printers = printer.getPrinters();
-console.log("Impresoras disponibles:", printers.map(p => p.name));
-
-// Si conoces el nombre exacto de la impresora, puedes usarlo aquí
-const myPrinter = printers[0].getDefaultPrinterName(); // o reemplaza con el nombre exacto
 
 app.use(express.static("public"));
 
@@ -67,21 +60,24 @@ function añadirMarcaAgua(inputPath, outputPath, watermarkPath, res, filename) {
   });
 }
 
-app.listen(PORT, () => {
-  console.log(`Servidor en http://localhost:${PORT}`);
+app.get("/print-photo", (req, res) => {
+  const printerName = 'HP_Envy_6100e_series_EA4513'; // cámbialo por el real
+
+  const cmd = `lp -o media=4x6 -o fit-to-page -d ${printerName} "${printPath}"`;
+
+  exec(cmd, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error al imprimir: ${error.message}`);
+      return res.status(500).send('Error al imprimir');
+    }
+    if (stderr) {
+      console.error(`Stderr: ${stderr}`);
+    }
+    console.log(`Stdout: ${stdout}`);
+    res.send('Foto enviada a la impresora');
+  });
 });
 
-app.get("/print-photo", (req, res) => {
- const datos = fs.readFileSync(printPath);
-printer.printDirect({
-  data: datos,
-  printer: myPrinter,
-  type: 'JPEG', // o 'RAW' si da error
-  success: function (jobID) {
-    console.log("Imagen enviada a imprimir. ID del trabajo:", jobID);
-  },
-  error: function (err) {
-    console.error("Error al imprimir:", err);
-  }
-});
+app.listen(PORT, () => {
+  console.log(`Servidor en http://localhost:${PORT}`);
 });
