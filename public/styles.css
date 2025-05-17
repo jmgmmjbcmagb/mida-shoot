@@ -119,8 +119,7 @@ img {
 #instructions2,
 #instructions3 {
   opacity: 0;
-  transition: opacity 1s ease-in-out;
-  animation: fadeinout 7s forwards;
+  animation: fadeIn 1.5s ease-in-out forwards;
   position: fixed;
   width: 30%;
   bottom: 0;
@@ -137,17 +136,8 @@ img {
   left: 0;
 }
 
-@keyframes fadeinout {
-  0% {
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  70% {
-    opacity: 1;
-  }
-  100% {
+@keyframes fadeIn {
+  to {
     opacity: 1;
   }
 }
