@@ -115,10 +115,24 @@ img {
   }
 }
 
-.fade-image {
-  opacity: 0;
+#instructions1, #instructions2, #instructions3 {
+    opacity: 0;
   transition: opacity 1s ease-in-out;
   animation: fadeinout 7s forwards;
+  position: fixed;
+    width: 30%;
+    left: 0;
+    bottom: 0;
+    border: 0;
+    z-index: 10;
+}
+
+#instructions2 {
+    right: 0;
+}
+
+#instructions1, #instructions3 {
+    left: 0;
 }
 
 @keyframes fadeinout {
@@ -134,20 +148,4 @@ img {
   100% {
     opacity: 1;
   }
-}
-
-#instructions1, #instructions2, #instructions3 {
-  position: fixed;
-    width: 30%;
-    left: 0;
-    bottom: 0;
-    border: 0;
-}
-
-#instructions2 {
-    right: 0;
-}
-
-#instructions1, #instructions3 {
-    left: 0;
 }
