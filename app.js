@@ -5,6 +5,16 @@ const fs = require("fs");
 const app = express();
 const PORT = 3000;
 const watermarkPath = path.join(__dirname, "public/watermark.png");
+const printer = require('printer');
+const fs = require('fs');
+const path = require('path');
+const printPath = path.join(__dirname, 'public', 'test.jpg');
+
+const printers = printer.getPrinters();
+console.log("Impresoras disponibles:", printers.map(p => p.name));
+
+// Si conoces el nombre exacto de la impresora, puedes usarlo aquí
+const myPrinter = printers[0].getDefaultPrinterName(); // o reemplaza con el nombre exacto
 
 app.use(express.static("public"));
 
@@ -40,12 +50,13 @@ app.get("/take-photo", (req, res) => {
       aliasPath,
       path.join(__dirname, "public/fotoImprimir.jpg"),
       watermarkPath,
-      res
+      res,
+      filename
     );
   });
 });
 
-function añadirMarcaAgua(inputPath, outputPath, watermarkPath, res) {
+function añadirMarcaAgua(inputPath, outputPath, watermarkPath, res, filename) {
   const command = `composite -gravity SouthWest -geometry +10+10 ${watermarkPath} ${inputPath} ${outputPath}`;
 
   return exec(command, (err, stdout, stderr) => {
@@ -54,10 +65,25 @@ function añadirMarcaAgua(inputPath, outputPath, watermarkPath, res) {
     } else {
       console.log("✅ Marca de agua añadida:", outputPath);
     }
-    res.redirect("/");
+    res.send(filename);
   });
 }
 
 app.listen(PORT, () => {
   console.log(`Servidor en http://localhost:${PORT}`);
+});
+
+app.get("/print-photo", (req, res) => {
+ const datos = fs.readFileSync(printPath);
+printer.printDirect({
+  data: datos,
+  printer: myPrinter,
+  type: 'JPEG', // o 'RAW' si da error
+  success: function (jobID) {
+    console.log("Imagen enviada a imprimir. ID del trabajo:", jobID);
+  },
+  error: function (err) {
+    console.error("Error al imprimir:", err);
+  }
+});
 });

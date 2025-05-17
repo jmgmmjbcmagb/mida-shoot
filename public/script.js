@@ -63,3 +63,14 @@ document.addEventListener("keydown", (event) => {
     photoElement.style.display = "none";
   }
 });
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "3" && countRun === false && showPhoto === true) {
+    fetch("/take-photo")
+        .then(() => {
+              showPhoto = false;
+    photoElement.style.display = "none";
+        })
+        .catch((err) => console.error("Error al imprimir foto:", err));
+  }
+});
