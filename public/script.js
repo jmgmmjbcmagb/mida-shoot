@@ -7,6 +7,8 @@ const instructions2 = document.getElementById("instructions2");
 const instructions3 = document.getElementById("instructions3");
 let countRun = false;
 let showPhoto = false;
+instructions2.style.display = "none";
+instructions3.style.display = "none";
 
 navigator.mediaDevices
   .getUserMedia({ video: true, audio: false })
