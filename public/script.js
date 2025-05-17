@@ -2,6 +2,9 @@ const webcam = document.getElementById("webcam");
 const photoElement = document.getElementById("photo");
 const image = document.getElementById("image");
 const loading = document.getElementById("loading");
+const instructions1 = document.getElementById("instructions1");
+const instructions2 = document.getElementById("instructions2");
+const instructions3 = document.getElementById("instructions3");
 let countRun = false;
 let showPhoto = false;
 
@@ -48,11 +51,17 @@ function updatePhoto(src) {
     photoElement.style.display = "flex";
     countRun = false;
     showPhoto = true;
+    instructions1.style.display = "none";
+    instructions2.style.display = "block";
+    instructions3.style.display = "none";
   }, 2000);
 }
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "2" && countRun === false && showPhoto === false) {
+    instructions1.style.display = "none";
+    instructions2.style.display = "none";
+    instructions3.style.display = "none";
     takePhoto();
   }
 });
@@ -60,6 +69,9 @@ document.addEventListener("keydown", (event) => {
 document.addEventListener("keydown", (event) => {
   if (event.key === "1" && countRun === false) {
     showPhoto = false;
+    instructions1.style.display = "block";
+    instructions2.style.display = "none";
+    instructions3.style.display = "none";
     photoElement.style.display = "none";
   }
 });
@@ -67,10 +79,18 @@ document.addEventListener("keydown", (event) => {
 document.addEventListener("keydown", (event) => {
   if (event.key === "3" && countRun === false && showPhoto === true) {
     fetch("/print-photo")
-        .then(() => {
-              showPhoto = false;
-    photoElement.style.display = "none";
-        })
-        .catch((err) => console.error("Error al imprimir foto:", err));
+      .then(() => {
+        showPhoto = false;
+        photoElement.style.display = "none";
+        instructions1.style.display = "none";
+        instructions2.style.display = "none";
+        instructions3.style.display = "block";
+        setTimeout(() => {
+          instructions1.style.display = "block";
+          instructions2.style.display = "none";
+          instructions3.style.display = "none";
+        }, 5000);
+      })
+      .catch((err) => console.error("Error al imprimir foto:", err));
   }
 });

@@ -5,7 +5,7 @@ const fs = require("fs");
 const app = express();
 const PORT = 3000;
 const watermarkPath = path.join(__dirname, "public/watermark.png");
-const printPath = path.join(__dirname, 'public', 'fotoImprimir.jpg');
+const printPath = path.join(__dirname, "public", "fotoImprimir.jpg");
 
 app.use(express.static("public"));
 
@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views/index.html"));
 });
 
-// Ruta para tomar una foto
+// TAKE PHOTO
 app.get("/take-photo", (req, res) => {
   const now = new Date();
   const timestamp = now
@@ -37,7 +37,7 @@ app.get("/take-photo", (req, res) => {
 
     console.log("Foto tomada:", filename);
 
-    añadirMarcaAgua(
+    addWatermark(
       aliasPath,
       path.join(__dirname, "public/fotoImprimir.jpg"),
       watermarkPath,
@@ -47,7 +47,25 @@ app.get("/take-photo", (req, res) => {
   });
 });
 
-function añadirMarcaAgua(inputPath, outputPath, watermarkPath, res, filename) {
+// PRINT PHOTO
+app.get("/print-photo", (req, res) => {
+  const printerName = "HP_Envy_6100e_series_EA4513";
+  const cmd = `lp -o media=10x15cm -o cupsPrintQuality=High -o fit-to-page -d ${printerName} "${printPath}"`;
+
+  exec(cmd, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error al imprimir: ${error.message}`);
+      return res.status(500).send("Error al imprimir");
+    }
+    if (stderr) {
+      console.error(`Stderr: ${stderr}`);
+    }
+    console.log(`Stdout: ${stdout}`);
+    res.send("Foto enviada a la impresora");
+  });
+});
+
+function addWatermark(inputPath, outputPath, watermarkPath, res, filename) {
   const command = `composite -gravity SouthWest -geometry +10+10 ${watermarkPath} ${inputPath} ${outputPath}`;
 
   return exec(command, (err, stdout, stderr) => {
@@ -59,24 +77,6 @@ function añadirMarcaAgua(inputPath, outputPath, watermarkPath, res, filename) {
     res.send(filename);
   });
 }
-
-app.get("/print-photo", (req, res) => {
-  const printerName = 'HP_Envy_6100e_series_EA4513'; // cámbialo por el real
-
-  const cmd = `lp -o media=10x15cm -o cupsPrintQuality=High -o fit-to-page -d ${printerName} "${printPath}"`;
-
-  exec(cmd, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error al imprimir: ${error.message}`);
-      return res.status(500).send('Error al imprimir');
-    }
-    if (stderr) {
-      console.error(`Stderr: ${stderr}`);
-    }
-    console.log(`Stdout: ${stdout}`);
-    res.send('Foto enviada a la impresora');
-  });
-});
 
 app.listen(PORT, () => {
   console.log(`Servidor en http://localhost:${PORT}`);
